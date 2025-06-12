@@ -10,6 +10,7 @@ import { HashLoader } from "react-spinners";
 const CrimeReports = () => {
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.report);
+
   const {
     register,
     handleSubmit,
@@ -24,7 +25,10 @@ const CrimeReports = () => {
   const videoRef = useRef(null);
   const documentRef = useRef(null);
   const [isListening, setIsListening] = useState(false);
-  const [coordinates, setCoordinates] = useState({ latitude: null, longitude: null });
+  const [coordinates, setCoordinates] = useState({
+    latitude: null,
+    longitude: null,
+  });
 
   const base64ToFile = (base64String, filename) => {
     const arr = base64String.split(",");
@@ -38,7 +42,6 @@ const CrimeReports = () => {
     return new File([u8arr], filename, { type: mime });
   };
 
-  // Function to get user's location
   const getLocation = () => {
     return new Promise((resolve, reject) => {
       if (!navigator.geolocation) {
@@ -61,11 +64,10 @@ const CrimeReports = () => {
 
   const onSubmit = async (data) => {
     try {
-      // Get user's location
       const { latitude, longitude } = await getLocation();
 
-      // Validate signature
-      if (sigCanvas.current.isEmpty()) {
+      // Check if signature exists
+      if (!sigCanvas.current || sigCanvas.current.isEmpty()) {
         setError("signature", {
           type: "manual",
           message: "Please provide a signature before submitting!",
@@ -73,7 +75,6 @@ const CrimeReports = () => {
         return;
       }
 
-      // Validate prompt
       if (!data.prompt.trim()) {
         setError("prompt", {
           type: "manual",
@@ -82,54 +83,45 @@ const CrimeReports = () => {
         return;
       }
 
-      // Convert signature to file
-      const signatureData = sigCanvas.current.getTrimmedCanvas().toDataURL("image/png");
+      // Get the signature as data URL
+      const signatureData = sigCanvas.current.toDataURL("image/png");
       const signatureFile = base64ToFile(signatureData, "signature.png");
 
-      // Prepare FormData
       const formData = new FormData();
       formData.append("signatureImage", signatureFile);
       formData.append("prompt", data.prompt);
       formData.append("latitude", latitude);
       formData.append("longitude", longitude);
 
-      // Append all evidence files to the 'evidenceFiles' field
-      if (imageRef.current.files.length > 0) {
+      if (imageRef.current?.files.length > 0) {
         formData.append("evidenceFiles", imageRef.current.files[0]);
       }
-      if (videoRef.current.files.length > 0) {
+      if (videoRef.current?.files.length > 0) {
         formData.append("evidenceFiles", videoRef.current.files[0]);
       }
-      if (documentRef.current.files.length > 0) {
+      if (documentRef.current?.files.length > 0) {
         formData.append("evidenceFiles", documentRef.current.files[0]);
       }
 
-      // // Log FormData contents
-      // for (const [key, value] of formData.entries()) {
-      //   console.log(key, value);
-      // }
-
-      // Submit the form data
       await dispatch(submitCrimeReport(formData)).unwrap();
       toast.success("Report submitted successfully");
 
-      // Clear form
       sigCanvas.current.clear();
-      imageRef.current.value = "";
-      videoRef.current.value = "";
-      documentRef.current.value = "";
+      if (imageRef.current) imageRef.current.value = "";
+      if (videoRef.current) videoRef.current.value = "";
+      if (documentRef.current) documentRef.current.value = "";
       setValue("prompt", "");
     } catch (error) {
-      console.log("Error submitting report:", error);
-      toast.error(`Failed to submit report! Please try again`);
+      console.error("Error submitting report:", error);
+      toast.error("Failed to submit report! Please try again");
     }
   };
 
   const clearReport = () => {
-    sigCanvas.current.clear();
-    imageRef.current.value = "";
-    videoRef.current.value = "";
-    documentRef.current.value = "";
+    sigCanvas.current?.clear();
+    if (imageRef.current) imageRef.current.value = "";
+    if (videoRef.current) videoRef.current.value = "";
+    if (documentRef.current) documentRef.current.value = "";
     setValue("prompt", "");
     toast.success("Report has been cleared successfully");
   };
@@ -141,35 +133,30 @@ const CrimeReports = () => {
     }
 
     const recognition = new window.webkitSpeechRecognition();
-    recognition.continuous = false; 
-    recognition.interimResults = false; 
-    recognition.lang = "en-US"; 
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = "en-US";
 
-    // Start listening
     recognition.start();
     setIsListening(true);
 
-    // When speech recognition ends
     recognition.onend = () => {
       setIsListening(false);
     };
 
-    // When a result is received
     recognition.onresult = (event) => {
       const transcript = event.results[0][0].transcript;
-      console.log("Transcript:", transcript); 
-      setValue("prompt", transcript); 
+      console.log("Transcript:", transcript);
+      setValue("prompt", transcript);
     };
 
-    // Handle errors
     recognition.onerror = (event) => {
-      console.error("Speech recognition error:", event.error); 
+      console.error("Speech recognition error:", event.error);
       toast.error("Error occurred in recognition: " + event.error);
       setIsListening(false);
     };
   };
 
-  // Debugging: Log the prompt value whenever it changes
   useEffect(() => {
     console.log("Prompt value:", getValues("prompt"));
   }, [getValues("prompt")]);
@@ -193,7 +180,9 @@ const CrimeReports = () => {
         </h1>
 
         <div>
-          <label className="block mb-2 text-sm font-normal text-white">Image Evidence</label>
+          <label className="block mb-2 text-sm font-normal text-white">
+            Image Evidence
+          </label>
           <input
             ref={imageRef}
             type="file"
@@ -202,7 +191,9 @@ const CrimeReports = () => {
         </div>
 
         <div>
-          <label className="block mb-2 text-sm font-normal text-white">Video Or Audio Evidence</label>
+          <label className="block mb-2 text-sm font-normal text-white">
+            Video Or Audio Evidence
+          </label>
           <input
             ref={videoRef}
             type="file"
@@ -211,7 +202,9 @@ const CrimeReports = () => {
         </div>
 
         <div className="lg:col-span-2">
-          <label className="block mb-2 text-sm font-normal text-white">Document Evidence</label>
+          <label className="block mb-2 text-sm font-normal text-white">
+            Document Evidence
+          </label>
           <input
             ref={documentRef}
             type="file"
@@ -220,34 +213,52 @@ const CrimeReports = () => {
         </div>
 
         <div className="xl:col-span-2 lg:col-span-2">
-          <h2 className="block mb-2 text-sm font-normal text-white">Signature</h2>
+          <h2 className="block mb-2 text-sm font-normal text-white">
+            Signature
+          </h2>
           <div className="border border-gray-300 bg-white rounded-md shadow p-4">
             <SignatureCanvas
               ref={sigCanvas}
               penColor="red"
-              canvasProps={{ width: 500, height: 100, className: "bg-blue w-full" }}
+              canvasProps={{
+                width: 500,
+                height: 100,
+                className: "sigCanvas"
+              }}
             />
             {errors.signature && (
-              <p className="text-red-500 text-xs mt-1">{errors.signature.message}</p>
+              <p className="text-red-500 text-xs mt-1">
+                {errors.signature.message}
+              </p>
             )}
           </div>
         </div>
 
         <div className="lg:col-span-2">
-          <label className="block mb-2 text-sm font-normal text-white">Report Prompt</label>
+          <label className="block mb-2 text-sm font-normal text-white">
+            Report Prompt
+          </label>
           <div className="relative">
             <textarea
               {...register("prompt", { required: "Prompt is required" })}
               className="w-full h-32 p-3 rounded-lg text-sm pr-12"
               placeholder="Type a report prompt..."
             />
-            {errors.prompt && <p className="text-red-500 text-xs mt-1">{errors.prompt.message}</p>}
+            {errors.prompt && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.prompt.message}
+              </p>
+            )}
             <button
               type="button"
               onClick={startVoiceToText}
               className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
             >
-              <FaMicrophone className={`w-6 h-6 ${isListening ? "text-teal-400" : "text-custom-teal"}`} />
+              <FaMicrophone
+                className={`w-6 h-6 ${
+                  isListening ? "text-teal-400" : "text-custom-teal"
+                }`}
+              />
             </button>
           </div>
         </div>
