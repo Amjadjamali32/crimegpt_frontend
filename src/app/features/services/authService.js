@@ -66,7 +66,7 @@ const resetPassword = async (token, password) => {
 // Refresh Access Token
 const refreshToken = async () => {
   try {
-    const response = await axiosInstance.post(`${API_URL}/auth/refresh-token`, {}, { withCredentials: true });
+    const response = await axiosInstance.post(`${API_URL}/auth/refreshToken`, {}, { withCredentials: true });
     return response.data; 
   } catch (error) {
     console.error("Refresh Token Error:", error.response ? error.response.data : error.message);
