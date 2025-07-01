@@ -7,7 +7,9 @@ import { toast } from "react-toastify"; // Import toast for notifications
 
 const SearchReportStatus = () => {
   const dispatch = useDispatch();
-  const { singleReport, isLoading, isError, message } = useSelector((state) => state.report);
+  const { singleReport, isLoading, isError, message } = useSelector(
+    (state) => state.report
+  );
   const [caseNumber, setCaseNumber] = useState("");
   const [hasSearched, setHasSearched] = useState(false); // Track if the user has performed a search
   const { user } = useSelector((state) => state.auth); // Assuming `auth` is your authentication slice
@@ -59,97 +61,108 @@ const SearchReportStatus = () => {
 
   return (
     <>
-      <div className="pt-16 px-4 sm:px-6 lg:px-8 sm:ml-[250px] lg:pt-16 xl:pt-16">
+      <div className="pt-24 px-4 sm:px-6 lg:px-8 sm:ml-[250px]">
+        {" "}
+        {/* Increased top padding */}
         {/* Main Content */}
-        <form onSubmit={handleSearch} className="max-w-3xl grid grid-cols-1 gap-6 px-4 sm:px-6 lg:px-8 py-8 lg:ms-[5%] xl:ms-[10%]">
-          <div className="font-extrabold font-inter text-center">
-            <h1 className="text-2xl sm:text-3xl font-inter">Track a Report By Case ID</h1>
-          </div>
-
-          {/* Search Input */}
-          <div className="relative font-inter">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <FaSearch size={20} className="text-gray-400 ms-4" />
+        <div className="max-w-4xl mx-auto">
+          {" "}
+          {/* Centered container with max-width */}
+          <form onSubmit={handleSearch} className="grid grid-cols-1 gap-6 py-8">
+            <div className="text-center">
+              <h1 className="text-2xl sm:text-3xl font-bold font-inter">
+                Track a Report By Case ID
+              </h1>
             </div>
-            <input
-              type="search"
-              id="default-search"
-              className="w-full p-4 px-16 text-sm rounded-full bg-gray-200 shadow-lg font-inter focus:outline-custom-teal"
-              placeholder="Search Reports..."
-              required
-              value={caseNumber}
-              onChange={(e) => setCaseNumber(e.target.value)}
-            />
-          </div>
 
-          {/* Search Button */}
-          <div className="flex justify-center mt-2">
-            <button
-              type="submit"
-              className="text-white flex items-center font-inter w-3/6 sm:w-2/6 md:w-2/6 lg:w-3/12 xl:w-3/12 justify-center gap-2 p-3 hover:bg-[#2c5573] bg-custom-teal rounded-full"
-            >
-              <FaSearch size={18} />
-              <span>Search</span>
-            </button>
-          </div>
-        </form>
+            {/* Search Input */}
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <FaSearch className="text-gray-400" size={20} />
+              </div>
+              <input
+                type="search"
+                id="default-search"
+                className="w-full p-4 pl-14 text-sm rounded-full bg-gray-200 shadow-lg focus:outline-custom-teal focus:ring-2 focus:ring-custom-teal"
+                placeholder="Search Reports..."
+                required
+                value={caseNumber}
+                onChange={(e) => setCaseNumber(e.target.value)}
+              />
+            </div>
 
-        {/* Initial Message (before any search is performed) */}
-        {!hasSearched && !isError && (
-          <div className="text-center mt-4 text-gray-600">
-            <p className="font-inter">Enter a case number above to track the status of your report.</p>
-          </div>
-        )}
-
-        {/* Report Details */}
-        {hasSearched && singleReport && (
-          <div className="bg-gray-200 gap-24 rounded shadow-lg p-6 mb-3 border border-custom-teal font-inter text-center sm:text-left">
-            <h2 className="text-xl font-bold pl-7 text-center mb-5">
-              Crime Report Details
-            </h2>
-            <div className="grid grid-cols-1 gap-4 pl-4">
-              <div>
-                <span className="font-bold">Report Number: </span>
-                <u className="mt-1 no-underline">{singleReport.data.caseNumber}</u>
-              </div>
-              <div>
-                <span className="font-bold">Case Status: </span>
-                <u
-                  className={`mt-1 no-underline px-5 py-1.5 rounded-full font-inter ${
-                    singleReport?.data?.reportStatus === "pending"
-                      ? "bg-blue-500"
-                      : singleReport?.data?.reportStatus === "rejected"
-                      ? "bg-red-500"
-                      : singleReport?.data?.reportStatus === "investigating"
-                      ? "bg-orange-500"
-                      : singleReport?.data?.reportStatus === "closed"
-                      ? "bg-gray-500"
-                      : "bg-green-500"
-                  } text-white`}
-                >
-                  {singleReport?.data?.reportStatus}
-                </u>
-              </div>
-              <div>
-                <span className="font-bold">Crime Type: </span>
-                <u className="mt-1 no-underline">
-                  {cleanIncidentType(singleReport?.data?.incident_type)}
-                </u>
-              </div>
-              <div>
-                <span className="font-bold">Reported At: </span>
-                <u className="mt-1 no-underline">
-                  {formatDate(singleReport?.data?.reportedDate)}
-                </u>
+            {/* Search Button */}
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                className="text-white flex items-center justify-center gap-2 p-3 hover:bg-[#2c5573] bg-custom-teal rounded-full w-full sm:w-1/2 md:w-1/3 lg:w-1/4"
+              >
+                <FaSearch size={18} />
+                <span>Search</span>
+              </button>
+            </div>
+          </form>
+          {/* Initial Message */}
+          {!hasSearched && !isError && (
+            <div className="text-center mt-4 text-gray-600">
+              <p className="font-inter">
+                Enter a case number above to track the status of your report.
+              </p>
+            </div>
+          )}
+          {/* Report Details */}
+          {hasSearched && singleReport && (
+            <div className="bg-gray-200 rounded-lg shadow-lg p-6 mb-8 border border-custom-teal">
+              <h2 className="text-xl font-bold text-center mb-6">
+                Crime Report Details
+              </h2>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="flex flex-col sm:flex-row sm:items-center">
+                  <span className="font-bold sm:w-1/2">Report Number:</span>
+                  <span className="sm:w-1/2">
+                    {singleReport.data.caseNumber}
+                  </span>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:items-center">
+                  <span className="font-bold sm:w-1/2">Case Status:</span>
+                  <span
+                    className={`px-4 py-1 rounded-full text-white text-center ${
+                      singleReport?.data?.reportStatus === "pending"
+                        ? "bg-blue-500"
+                        : singleReport?.data?.reportStatus === "rejected"
+                        ? "bg-red-500"
+                        : singleReport?.data?.reportStatus === "investigating"
+                        ? "bg-orange-500"
+                        : singleReport?.data?.reportStatus === "closed"
+                        ? "bg-gray-500"
+                        : "bg-green-500"
+                    }`}
+                  >
+                    {singleReport?.data?.reportStatus}
+                  </span>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:items-center">
+                  <span className="font-bold sm:w-1/2">Crime Type:</span>
+                  <span className="sm:w-1/2">
+                    {cleanIncidentType(singleReport?.data?.incident_type)}
+                  </span>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:items-center">
+                  <span className="font-bold sm:w-1/2">Reported At:</span>
+                  <span className="sm:w-1/2">
+                    {formatDate(singleReport?.data?.reportedDate)}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-
-        {/* Error Message (only shown after a search is performed and no report is found) */}
-        {hasSearched && isError && (
-          <p className="text-center text-red-500 mt-2 font-inter font-semibold mx-auto lg:-ml-12">{message}!</p>
-        )}
+          )}
+          {/* Error Message */}
+          {hasSearched && isError && (
+            <p className="text-center text-red-500 font-semibold my-4">
+              {message}!
+            </p>
+          )}
+        </div>
       </div>
     </>
   );

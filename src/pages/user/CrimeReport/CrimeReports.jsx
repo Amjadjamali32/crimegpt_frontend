@@ -170,116 +170,156 @@ const CrimeReports = () => {
   }
 
   return (
-    <div className="pt-20">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="grid mb-20 grid-cols-1 shadow-md shadow-gray-600 gap-6 mx-2 bg-custom-teal px-6 sm:px-10 sm:ms-[40%] sm:w-[55%] md:ms-[34%] lg:ms-[30%] md:w-[60%] lg:w-[63%] xl:w-[55%] py-8 rounded lg:grid-cols-2 font-inter"
-      >
-        <h1 className="col-span-full text-2xl text-gray-50 text-center font-bold sm:text-3xl pb-3">
-          Report A Crime
-        </h1>
+    <div className="pt-24 pl-0 md:pl-64">
+      {/* Adjust pl-64 to match your sidebar width */}
+      <div className="max-w-4xl mx-4 md:mx-8 lg:mx-auto font-inter bg-custom-teal rounded-md">
+        {" "}
+        {/* Responsive horizontal margins */}
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="bg-custom-teal shadow-md rounded-lg px-4 py-6 sm:p-8 space-y-6"
+        >
+          {/* Form Header */}
+          <h1 className="text-2xl sm:text-3xl font-bold text-center text-white mb-6">
+            Report A Crime
+          </h1>
 
-        <div>
-          <label className="block mb-2 text-sm font-normal text-white">
-            Image Evidence
-          </label>
-          <input
-            ref={imageRef}
-            type="file"
-            className="block w-full text-sm text-gray-900 border rounded-md bg-white py-2 px-2"
-          />
-        </div>
+          {/* Grid Container */}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            {/* Image Evidence */}
+            <div className="sm:col-span-1">
+              <label className="block text-sm font-medium text-white mb-1">
+                Image Evidence
+              </label>
+              <input
+                ref={imageRef}
+                type="file"
+                accept="image/*"
+                className="block w-full text-sm text-gray-500 bg-white rounded-md
+                  file:mr-4 file:py-2.5 file:px-4
+                  file:rounded-md file:border-0
+                  file:text-sm file:font-semibold
+                  file:bg-white file:text-teal-600
+                  hover:file:bg-gray-100 file:shadow-sm
+                  file:ring-1 file:ring-gray-300"
+              />
+            </div>
 
-        <div>
-          <label className="block mb-2 text-sm font-normal text-white">
-            Video Or Audio Evidence
-          </label>
-          <input
-            ref={videoRef}
-            type="file"
-            className="block w-full text-sm text-gray-900 border rounded-md bg-white py-2 px-2"
-          />
-        </div>
+            {/* Video/Audio Evidence */}
+            <div className="sm:col-span-1">
+              <label className="block text-sm font-medium text-white mb-1">
+                Video Or Audio Evidence
+              </label>
+              <input
+                ref={videoRef}
+                type="file"
+                accept="video/*,audio/*"
+                className="block w-full text-sm text-gray-500 bg-white rounded-md
+                file:mr-4 file:py-2.5 file:px-4
+                file:rounded-md file:border-0
+                file:text-sm file:font-semibold
+                file:bg-white file:text-teal-600
+                hover:file:bg-gray-100 file:shadow-sm
+                file:ring-1 file:ring-gray-300"
+              />
+            </div>
 
-        <div className="lg:col-span-2">
-          <label className="block mb-2 text-sm font-normal text-white">
-            Document Evidence
-          </label>
-          <input
-            ref={documentRef}
-            type="file"
-            className="block w-full text-sm text-gray-900 border rounded-md bg-white py-2 px-2"
-          />
-        </div>
+            {/* Document Evidence - Full Width */}
+            <div className="sm:col-span-2">
+              <label className="block text-sm font-medium text-white mb-1">
+                Document Evidence
+              </label>
+              <input
+                ref={documentRef}
+                type="file"
+                accept=".pdf,.doc,.docx"
+                className="block w-full text-sm text-gray-500 bg-white rounded-md
+                  file:mr-4 file:py-2.5 file:px-4
+                  file:rounded-md file:border-0
+                  file:text-sm file:font-semibold
+                  file:bg-white file:text-teal-600
+                  hover:file:bg-gray-100 file:shadow-sm
+                  file:ring-1 file:ring-gray-300"
+              />
+            </div>
 
-        <div className="xl:col-span-2 lg:col-span-2">
-          <h2 className="block mb-2 text-sm font-normal text-white">
-            Signature
-          </h2>
-          <div className="border border-gray-300 bg-white rounded-md shadow p-4">
-            <SignatureCanvas
-              ref={sigCanvas}
-              penColor="red"
-              canvasProps={{
-                width: 500,
-                height: 100,
-                className: "sigCanvas"
-              }}
-            />
-            {errors.signature && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.signature.message}
-              </p>
-            )}
+            {/* Signature - Full Width */}
+            <div className="sm:col-span-2">
+              <label className="block text-sm font-medium text-white mb-2">
+                Signature
+              </label>
+              <div className="border border-gray-300 bg-white rounded-md shadow-sm p-4">
+                <SignatureCanvas
+                  ref={sigCanvas}
+                  penColor="red"
+                  canvasProps={{
+                    width: 500,
+                    height: 100,
+                    className: "sigCanvas w-full",
+                    style: { maxWidth: "100%" },
+                  }}
+                />
+                {errors.signature && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.signature.message}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Report Prompt - Full Width */}
+            <div className="sm:col-span-2">
+              <label className="block text-sm font-medium text-white mb-1">
+                Report Prompt
+              </label>
+              <div className="relative">
+                <textarea
+                  {...register("prompt", { required: "Prompt is required" })}
+                  className="w-full h-32 p-3 border border-gray-300 rounded-lg text-sm focus:ring-teal-500 focus:border-teal-500"
+                  placeholder="Type a report prompt..."
+                />
+                {errors.prompt && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.prompt.message}
+                  </p>
+                )}
+                <button
+                  type="button"
+                  onClick={startVoiceToText}
+                  className="absolute bottom-5 right-3 text-gray-500 hover:text-teal-600"
+                  aria-label="Voice input"
+                >
+                  <FaMicrophone
+                    className={`w-5 h-5 ${
+                      isListening ? "text-teal-600" : "text-gray-400"
+                    }`}
+                  />
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div className="lg:col-span-2">
-          <label className="block mb-2 text-sm font-normal text-white">
-            Report Prompt
-          </label>
-          <div className="relative">
-            <textarea
-              {...register("prompt", { required: "Prompt is required" })}
-              className="w-full h-32 p-3 rounded-lg text-sm pr-12"
-              placeholder="Type a report prompt..."
-            />
-            {errors.prompt && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.prompt.message}
-              </p>
-            )}
+          {/* Form Buttons */}
+          <div className="flex flex-col sm:flex-row sm:justify-around gap-4 pt-4">
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full sm:w-auto px-8 py-3 bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-70 flex items-center justify-center gap-2"
+            >
+              <FaPaperPlane />
+              {isLoading ? "Submitting..." : "Submit Report"}
+            </button>
             <button
               type="button"
-              onClick={startVoiceToText}
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+              onClick={clearReport}
+              className="w-full sm:w-auto px-8 py-3 bg-red-500 hover:bg-red-600 text-white font-medium rounded-full shadow-lg focus:outline-none flex items-center justify-center gap-2"
             >
-              <FaMicrophone
-                className={`w-6 h-6 ${
-                  isListening ? "text-teal-400" : "text-custom-teal"
-                }`}
-              />
+              <FaEraser />
+              Clear Report
             </button>
           </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full lg:col-span-2 pb-2">
-          <button
-            type="submit"
-            className="px-6 py-3 w-full text-white bg-teal-400 rounded-md hover:opacity-85 flex items-center justify-center gap-2"
-            disabled={isLoading}
-          >
-            <FaPaperPlane /> {isLoading ? "Submitting..." : "Submit Report"}
-          </button>
-          <button
-            type="button"
-            onClick={clearReport}
-            className="px-6 py-3 w-full text-white bg-red-500 rounded-md hover:opacity-85 flex items-center justify-center gap-2"
-          >
-            <FaEraser /> Clear Report
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };
