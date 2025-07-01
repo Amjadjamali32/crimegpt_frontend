@@ -85,31 +85,35 @@ const SingleReportView = () => {
   }
 
   return (
-    <div className="pt-20 px-4 sm:px-6 font-inter">
-      <form className="bg-gray-200 border border-custom-gray shadow-lg rounded-md p-6 mx-auto max-w-4xl">
+    <div className="pt-20 px-4 sm:px-6 lg:px-8 font-inter ml-0 lg:ml-64 transition-all duration-300">
+      <form className="bg-gray-200 border border-custom-gray shadow-lg rounded-md p-6 mx-auto max-w-4xl w-full">
         <h2 className="text-xl font-bold text-center mb-5 underline underline-offset-8">
           Crime Report Details
         </h2>
 
         <div className="grid grid-cols-1 gap-4 sm:gap-5">
           <div className="flex flex-col sm:flex-row sm:items-center">
-            <span className="font-bold sm:w-1/4">Report ID:</span>
-            <span className="mt-1 sm:mt-0 sm:w-3/4">
+            <span className="font-bold sm:w-1/4 mb-1 sm:mb-0">Report ID:</span>
+            <span className="sm:w-3/4 break-words">
               {singleReport?.data?.caseNumber}
             </span>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center">
-            <span className="font-bold sm:w-1/4">Report Date:</span>
-            <span className="mt-1 sm:mt-0 sm:w-3/4">
+            <span className="font-bold sm:w-1/4 mb-1 sm:mb-0">
+              Report Date:
+            </span>
+            <span className="sm:w-3/4">
               {formatPakistaniDateTime(singleReport?.data?.reportedDate)}
             </span>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center">
-            <span className="font-bold sm:w-1/4">Case Status:</span>
+            <span className="font-bold sm:w-1/4 mb-1 sm:mb-0">
+              Case Status:
+            </span>
             <span
-              className={`mt-1 sm:mt-0 sm:w-3/4 px-3 py-1 rounded-full text-white text-center ${
+              className={`sm:w-3/4 px-3 py-1 rounded-full text-white text-center inline-block ${
                 singleReport?.data?.reportStatus === "pending"
                   ? "bg-blue-500"
                   : singleReport?.data?.reportStatus === "rejected"
@@ -126,50 +130,54 @@ const SingleReportView = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center">
-            <span className="font-bold sm:w-1/4">Location:</span>
-            <span className="mt-1 sm:mt-0 sm:w-3/4">
+            <span className="font-bold sm:w-1/4 mb-1 sm:mb-0">Location:</span>
+            <span className="sm:w-3/4 break-words">
               {singleReport?.data?.location}
             </span>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center">
-            <span className="font-bold sm:w-1/4">Crime Type:</span>
-            <span className="mt-1 sm:mt-0 sm:w-3/4">
+            <span className="font-bold sm:w-1/4 mb-1 sm:mb-0">Crime Type:</span>
+            <span className="sm:w-3/4">
               {singleReport?.data?.incident_type}
             </span>
           </div>
 
           <div className="flex flex-col sm:flex-row">
-            <span className="font-bold sm:w-1/4">Description:</span>
-            <span className="mt-1 sm:mt-0 sm:w-3/4">
+            <span className="font-bold sm:w-1/4 mb-1 sm:mb-0">
+              Description:
+            </span>
+            <span className="sm:w-3/4 break-words">
               {singleReport?.data?.incident_description}
             </span>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center">
-            <span className="font-bold sm:w-1/4">Complainant Name:</span>
-            <span className="mt-1 sm:mt-0 sm:w-3/4">
+            <span className="font-bold sm:w-1/4 mb-1 sm:mb-0">
+              Complainant Name:
+            </span>
+            <span className="sm:w-3/4">
               {singleReport?.data?.complainant_name}
             </span>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center">
-            <span className="font-bold sm:w-1/4">Email:</span>
-            <span className="mt-1 sm:mt-0 sm:w-3/4">
+            <span className="font-bold sm:w-1/4 mb-1 sm:mb-0">Email:</span>
+            <span className="sm:w-3/4 break-words">
               {singleReport?.data?.complainant_email}
             </span>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center">
-            <span className="font-bold sm:w-1/4">NIC:</span>
-            <span className="mt-1 sm:mt-0 sm:w-3/4">
-              {singleReport?.data?.nic}
-            </span>
+            <span className="font-bold sm:w-1/4 mb-1 sm:mb-0">NIC:</span>
+            <span className="sm:w-3/4">{singleReport?.data?.nic}</span>
           </div>
 
           <div className="flex flex-col sm:flex-row">
-            <span className="font-bold sm:w-1/4">Complainant Signature:</span>
-            <div className="mt-1 sm:mt-0 sm:w-3/4">
+            <span className="font-bold sm:w-1/4 mb-1 sm:mb-0">
+              Complainant Signature:
+            </span>
+            <div className="sm:w-3/4">
               {singleReport?.data?.signatureImageUrl && (
                 <img
                   src={singleReport?.data?.signatureImageUrl}
