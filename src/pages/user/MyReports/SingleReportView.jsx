@@ -79,7 +79,7 @@ const SingleReportView = () => {
 
   return (
     <div className="pt-20 p-1 font-inter">
-      <form className="bg-gray-200 mb-4 sm:ms-[41%] sm:w-[58%] md:ms-[33%] md:w-[64%] lg:ms-[25%] lg:w-[72%] xl:ms-[23%] xl:w-[75%] border border-custom-gray shadow-lg p-6 mx-3 rounded-md">
+      <form className="bg-gray-200 mb-4 sm:ms-[41%] sm:w-[58%] md:ms-[33%] md:w-[64%] lg:ms-[25%] lg:w-[72%] xl:ms-[23%] xl:w-[77%] border border-custom-gray shadow-lg p-6 mx-3 rounded-md">
         <h2 className="text-xl font-bold text-center mb-5 underline underline-offset-8">
           Crime Report Details
         </h2>

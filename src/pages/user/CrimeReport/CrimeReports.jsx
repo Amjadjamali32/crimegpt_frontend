@@ -173,7 +173,7 @@ const CrimeReports = () => {
     <div className="pt-20">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid mb-20 grid-cols-1 shadow-md shadow-gray-600 gap-6 mx-2 bg-custom-teal px-6 sm:px-10 sm:ms-[40%] sm:w-[55%] md:ms-[34%] lg:ms-[30%] md:w-[60%] lg:w-[60%] xl:w-[50%] py-8 rounded lg:grid-cols-2 font-inter"
+        className="grid mb-20 grid-cols-1 shadow-md shadow-gray-600 gap-6 mx-2 bg-custom-teal px-6 sm:px-10 sm:ms-[40%] sm:w-[55%] md:ms-[34%] lg:ms-[30%] md:w-[60%] lg:w-[63%] xl:w-[55%] py-8 rounded lg:grid-cols-2 font-inter"
       >
         <h1 className="col-span-full text-2xl text-gray-50 text-center font-bold sm:text-3xl pb-3">
           Report A Crime

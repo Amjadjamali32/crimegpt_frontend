@@ -59,7 +59,7 @@ const SearchReportStatus = () => {
 
   return (
     <>
-      <div className="pt-16 px-4 sm:px-6 lg:px-8 sm:ml-[250px]">
+      <div className="pt-16 px-4 sm:px-6 lg:px-8 sm:ml-[250px] lg:pt-16 xl:pt-16">
         {/* Main Content */}
         <form onSubmit={handleSearch} className="max-w-3xl grid grid-cols-1 gap-6 px-4 sm:px-6 lg:px-8 py-8 lg:ms-[5%] xl:ms-[10%]">
           <div className="font-extrabold font-inter text-center">
