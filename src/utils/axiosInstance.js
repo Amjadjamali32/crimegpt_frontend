@@ -66,8 +66,8 @@ const tokenManager = {
   setTokens: (accessToken, refreshToken) => {
     const options = { 
       expires: accessToken ? 1 : 0, 
-      secure: import.meta.env.PROD,
-      sameSite: 'strict',
+      secure: import.meta.env.VITE_NODE_ENV === 'production',
+      sameSite: 'none',
       path: '/'
     };
     
@@ -131,7 +131,7 @@ axiosInstance.interceptors.response.use(
     
     try {
       const refreshToken = tokenManager.getRefreshToken();
-      if (!refreshToken) throw new Error("No refresh token");
+      if (!refreshToken) throw new Error("No refresh token!");
       
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/auth/refresh`,
@@ -140,7 +140,7 @@ axiosInstance.interceptors.response.use(
       );
       
       if (!response.data.access_token) {
-        throw new Error("Invalid refresh response");
+        throw new Error("Invalid refresh response!");
       }
       
       tokenManager.setTokens(response.data.access_token, response.data.refresh_token);
