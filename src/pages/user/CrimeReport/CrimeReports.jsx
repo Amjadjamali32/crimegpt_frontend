@@ -1,8 +1,21 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import SignatureCanvas from "react-signature-canvas";
 import { toast } from "react-toastify";
-import { FaPaperPlane, FaEraser, FaMicrophone } from "react-icons/fa";
+import {
+  FaEraser,
+  FaMicrophone,
+  FaFileAlt,
+  FaCamera,
+  FaVideo,
+  FaExclamationTriangle,
+  FaPenAlt,
+  FaInfoCircle,
+  FaRobot,
+  FaTrashAlt,
+  FaSpinner,
+  FaShieldAlt,
+} from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { submitCrimeReport } from "../../../app/features/reports/reportSlice.js";
 import { HashLoader } from "react-spinners";
@@ -10,13 +23,12 @@ import { HashLoader } from "react-spinners";
 const CrimeReports = () => {
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.report);
-
   const {
     register,
     handleSubmit,
     setValue,
     setError,
-    getValues,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -45,7 +57,9 @@ const CrimeReports = () => {
   const getLocation = () => {
     return new Promise((resolve, reject) => {
       if (!navigator.geolocation) {
-        reject(new Error("Geolocation is not supported by your browser."));
+        reject(
+          new Error("Location services are not available in your browser!")
+        );
       } else {
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -70,7 +84,7 @@ const CrimeReports = () => {
       if (!sigCanvas.current || sigCanvas.current.isEmpty()) {
         setError("signature", {
           type: "manual",
-          message: "Please provide a signature before submitting!",
+          message: "Please provide a signature before submitting Report!",
         });
         return;
       }
@@ -105,7 +119,7 @@ const CrimeReports = () => {
 
       await dispatch(submitCrimeReport(formData)).unwrap();
       toast.success("Report submitted successfully");
-
+      reset();
       sigCanvas.current.clear();
       if (imageRef.current) imageRef.current.value = "";
       if (videoRef.current) videoRef.current.value = "";
@@ -123,7 +137,7 @@ const CrimeReports = () => {
     if (videoRef.current) videoRef.current.value = "";
     if (documentRef.current) documentRef.current.value = "";
     setValue("prompt", "");
-    toast.success("Report has been cleared successfully");
+    toast.success("Your report has been cleared successfully");
   };
 
   const startVoiceToText = () => {
@@ -146,20 +160,14 @@ const CrimeReports = () => {
 
     recognition.onresult = (event) => {
       const transcript = event.results[0][0].transcript;
-      console.log("Transcript:", transcript);
       setValue("prompt", transcript);
     };
 
     recognition.onerror = (event) => {
-      console.error("Speech recognition error:", event.error);
       toast.error("Error occurred in recognition: " + event.error);
       setIsListening(false);
     };
   };
-
-  useEffect(() => {
-    console.log("Prompt value:", getValues("prompt"));
-  }, [getValues("prompt")]);
 
   if (isLoading) {
     return (
@@ -180,35 +188,38 @@ const CrimeReports = () => {
           className="bg-custom-teal shadow-md rounded-lg px-4 py-6 sm:p-8 space-y-6"
         >
           {/* Form Header */}
-          <h1 className="text-2xl sm:text-3xl font-bold text-center text-white mb-6">
-            Report A Crime
+          <h1 className="text-2xl sm:text-3xl font-bold text-center text-white mb-8">
+            Report Suspicious Activity Now
           </h1>
 
           {/* Grid Container */}
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             {/* Image Evidence */}
+            {/* Image Evidence */}
             <div className="sm:col-span-1">
-              <label className="block text-sm font-medium text-white mb-1">
-                Image Evidence
+              <label className="flex items-center gap-2 text-sm font-medium text-white mb-1">
+                <FaCamera className="text-teal-300" />
+                Attach Crime Scene Photos (JPEG, PNG)
               </label>
               <input
                 ref={imageRef}
                 type="file"
                 accept="image/*"
                 className="block w-full text-sm text-gray-500 bg-white rounded-md
-                  file:mr-4 file:py-2.5 file:px-4
-                  file:rounded-md file:border-0
-                  file:text-sm file:font-semibold
-                  file:bg-white file:text-teal-600
-                  hover:file:bg-gray-100 file:shadow-sm
-                  file:ring-1 file:ring-gray-300"
+                file:mr-4 file:py-2.5 file:px-4
+                file:rounded-md file:border-0
+                file:text-sm file:font-semibold
+                file:bg-white file:text-teal-600
+                hover:file:bg-gray-100 file:shadow-sm
+                file:ring-1 file:ring-gray-300"
               />
             </div>
 
             {/* Video/Audio Evidence */}
             <div className="sm:col-span-1">
-              <label className="block text-sm font-medium text-white mb-1">
-                Video Or Audio Evidence
+              <label className="flex items-center gap-2 text-sm font-medium text-white mb-1">
+                <FaVideo className="text-teal-300" />
+                Attach Surveillance Footage or Recordings
               </label>
               <input
                 ref={videoRef}
@@ -226,28 +237,31 @@ const CrimeReports = () => {
 
             {/* Document Evidence - Full Width */}
             <div className="sm:col-span-2">
-              <label className="block text-sm font-medium text-white mb-1">
-                Document Evidence
+              <label className="flex items-center gap-2 text-sm font-medium text-white mb-1">
+                <FaFileAlt className="text-teal-300" />
+                Supporting Document Evidences
               </label>
               <input
                 ref={documentRef}
                 type="file"
                 accept=".pdf,.doc,.docx"
                 className="block w-full text-sm text-gray-500 bg-white rounded-md
-                  file:mr-4 file:py-2.5 file:px-4
-                  file:rounded-md file:border-0
-                  file:text-sm file:font-semibold
-                  file:bg-white file:text-teal-600
-                  hover:file:bg-gray-100 file:shadow-sm
-                  file:ring-1 file:ring-gray-300"
+                file:mr-4 file:py-2.5 file:px-4
+                file:rounded-md file:border-0
+                file:text-sm file:font-semibold
+                file:bg-white file:text-teal-600
+                hover:file:bg-gray-100 file:shadow-sm
+                file:ring-1 file:ring-gray-300"
               />
             </div>
 
             {/* Signature - Full Width */}
             <div className="sm:col-span-2">
-              <label className="block text-sm font-medium text-white mb-2">
-                Signature
+              <label className="flex items-center gap-2 text-sm font-medium text-white mb-2">
+                <FaPenAlt className="text-teal-300" />
+                Sign to Verify This Report
               </label>
+
               <div className="border border-gray-300 bg-white rounded-md shadow-sm p-4">
                 <SignatureCanvas
                   ref={sigCanvas}
@@ -256,11 +270,33 @@ const CrimeReports = () => {
                     width: 500,
                     height: 100,
                     className: "sigCanvas w-full",
-                    style: { maxWidth: "100%" },
+                    style: {
+                      maxWidth: "100%",
+                      border: "1px dashed #d1d5db", // Added dashed border for better visibility
+                      backgroundColor: "#f9fafb", // Light gray background
+                    },
                   }}
                 />
+
+                <div className="flex flex-wrap justify-between mt-3 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => sigCanvas.current?.clear()}
+                    className="flex items-center gap-1 px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 rounded"
+                  >
+                    <FaEraser className="text-gray-600" />
+                    Clear Signature
+                  </button>
+
+                  <p className="text-xs text-gray-500 flex items-center gap-1">
+                    <FaInfoCircle />
+                    Sign within the canvas area
+                  </p>
+                </div>
+
                 {errors.signature && (
-                  <p className="mt-1 text-sm text-red-600">
+                  <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                    <FaExclamationTriangle />
                     {errors.signature.message}
                   </p>
                 )}
@@ -269,53 +305,92 @@ const CrimeReports = () => {
 
             {/* Report Prompt - Full Width */}
             <div className="sm:col-span-2">
-              <label className="block text-sm font-medium text-white mb-1">
-                Report Prompt
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-sm font-medium text-white">
+                  Report Details
+                </label>
+                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
+                  <FaRobot className="text-blue-600" />
+                  AI-assisted report
+                </span>
+              </div>
+
               <div className="relative">
                 <textarea
-                  {...register("prompt", { required: "Prompt is required" })}
+                  {...register("prompt", {
+                    required: "Please provide report details",
+                  })}
                   className="w-full h-32 p-3 border border-gray-300 rounded-lg text-sm focus:ring-teal-500 focus:border-teal-500"
-                  placeholder="Type a report prompt..."
+                  placeholder="Example: 'On July 15 at 3 PM, I witnessed two suspects breaking into a blue sedan at the Walmart parking lot...'"
                 />
-                {errors.prompt && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {errors.prompt.message}
-                  </p>
-                )}
+
+                {/* Voice Input Button */}
                 <button
                   type="button"
                   onClick={startVoiceToText}
-                  className="absolute bottom-5 right-3 text-gray-500 hover:text-teal-600"
+                  className="absolute bottom-5 right-3 p-2 rounded-full hover:bg-gray-100 transition-colors"
                   aria-label="Voice input"
+                  title="Start voice recording"
                 >
                   <FaMicrophone
                     className={`w-5 h-5 ${
-                      isListening ? "text-teal-600" : "text-gray-400"
+                      isListening
+                        ? "text-teal-600 animate-pulse"
+                        : "text-gray-500"
                     }`}
                   />
                 </button>
+              </div>
+
+              {/* AI Notice and Error Message */}
+              <div className="mt-1 space-y-1">
+                <p className="flex items-start gap-1 text-xs text-gray-400">
+                  <FaInfoCircle className="flex-shrink-0 mt-0.5" />
+                  <span>
+                    This report uses AI assistance. Please verify all generated
+                    information for accuracy.
+                  </span>
+                </p>
+
+                {errors.prompt && (
+                  <p className="flex items-center gap-1 text-sm text-red-600">
+                    <FaExclamationTriangle />
+                    {errors.prompt.message}
+                  </p>
+                )}
               </div>
             </div>
           </div>
 
           {/* Form Buttons */}
           <div className="flex flex-col sm:flex-row sm:justify-around gap-4 pt-4">
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full sm:w-auto px-8 py-3 bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-70 flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 py-3 bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-full shadow-lg focus:outline-none focus:ring-teal-500 disabled:opacity-70 flex items-center justify-center gap-2 transition-transform hover:scale-105"
             >
-              <FaPaperPlane />
-              {isLoading ? "Submitting..." : "Submit Report"}
+              {isLoading ? (
+                <>
+                  <FaSpinner className="animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                <>
+                  <FaShieldAlt className="text-white" />
+                  Get Emergency Help
+                </>
+              )}
             </button>
+
+            {/* Clear Button */}
             <button
               type="button"
               onClick={clearReport}
-              className="w-full sm:w-auto px-8 py-3 bg-red-500 hover:bg-red-600 text-white font-medium rounded-full shadow-lg focus:outline-none flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 py-3 bg-red-500 hover:bg-red-600 text-white font-medium rounded-full shadow-lg focus:outline-none flex items-center justify-center gap-2 transition-transform hover:scale-105"
             >
-              <FaEraser />
-              Clear Report
+              <FaTrashAlt />
+              Clear All Evidence
             </button>
           </div>
         </form>
