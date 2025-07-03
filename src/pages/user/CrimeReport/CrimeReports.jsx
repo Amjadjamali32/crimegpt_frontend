@@ -118,6 +118,13 @@ const CrimeReports = () => {
       }
 
       await dispatch(submitCrimeReport(formData)).unwrap();
+      // for debugging purposes
+      console.log("Report submitted successfully with data:" + formData);
+      // console.log("FormData contents:");
+      // for (let [key, value] of formData.entries()) {
+      //   console.log(key, value);
+      // }
+
       toast.success("Report submitted successfully");
       reset();
       sigCanvas.current.clear();
