@@ -50,8 +50,6 @@ const Notifications = () => {
         const setupMessageListener = async () => {
             try {
                 const payload = await onMessageListener();
-                console.log("Foreground message received:", payload);
-
                 // Show toast notification
                 toast.info(`New notification: ${payload.notification.title}`, {
                     position: "top-right",
@@ -91,7 +89,6 @@ const Notifications = () => {
 
     const handleCardClick = (card) => {
         if (!card.isRead) {
-            console.log("Marking as read", card._id);
             dispatch(markAsRead(card._id));
         }
         navigate(`/notifications/${card._id}`);

@@ -3,9 +3,8 @@ import axiosInstance from "../../../utils/axiosInstance.js";
 const API_URL = import.meta.env.VITE_API_URL; 
 
 // get all notifications
-export const getUserNotifications = async (userId) => {
-  const response = await axiosInstance.get(`${API_URL}/notifications/user/${userId}/get`);
-  console.log("Response:", response.data);
+export const getUserNotifications = async (id) => {
+  const response = await axiosInstance.get(`${API_URL}/notifications/user/${id}/get`);
   return response.data;
 };
 

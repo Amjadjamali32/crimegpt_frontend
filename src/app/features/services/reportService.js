@@ -10,10 +10,8 @@ const submitCrimeReport = async (reportData) => {
         "Content-Type": "multipart/form-data", 
       },
     });
-    console.log("Server response:", response.data); // Add this
     return response.data;
   } catch (error) {
-    console.error("Error details:", error.response); // Add this
     throw new Error(error.response?.data?.message || error.message || "Failed to submit crime report");
   }
 };

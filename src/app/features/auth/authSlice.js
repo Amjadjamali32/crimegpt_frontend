@@ -46,18 +46,9 @@ export const loginUser = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const response = await authService.login(userData);
-      Cookies.set("access_token", response.data.access_token, { expires: 1, secure: true });
-      Cookies.set("refresh_token", response.data.refresh_token, { expires: 7, secure: true });
+      Cookies.set("access_token", response.data.accessToken, { expires: 1, secure: true });
+      Cookies.set("refresh_token", response.data.refreshToken, { expires: 7, secure: true });
       updateLocalStorage(response.data.user, response.data.user?.role, true);
-      // const response = await authService.login(userData);
-
-      // Store tokens in cookies
-      // Cookies.set("access_token", response.data.access_token, { expires: 1, secure: true });
-      // Cookies.set("refresh_token", response.data.refresh_token, { expires: 7, secure: true });
-
-      // Update localStorage
-      // const role = response.data?.user?.role || null;
-      // updateLocalStorage(response.data.user, role, true);
 
       // Update FCM token in the backend if provided
       if (userData.fcmToken) {
@@ -83,8 +74,7 @@ export const updateFCMToken = createAsyncThunk(
   }
 );
 
-// remaining for refresgin tokens
-
+// remaining for refresgin token
 export const refreshTokens = createAsyncThunk(
   "auth/refreshTokens",
   async (_, thunkAPI) => {
@@ -92,7 +82,7 @@ export const refreshTokens = createAsyncThunk(
       const refreshToken = Cookies.get("refresh_token");
       if (!refreshToken) throw new Error("No refresh token");
       
-      const response = await authService.refreshTokens(refreshToken);
+      const response = await authService.refreshToken(refreshToken);
       Cookies.set("access_token", response.data.access_token, { expires: 1, secure: true });
       return response.data.access_token;
     } catch (error) {

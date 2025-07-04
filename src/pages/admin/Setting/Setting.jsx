@@ -24,6 +24,7 @@ const Setting = () => {
     handleSubmit: handlePersonalSubmit,
     formState: { errors: personalErrors },
     reset: resetPersonalInfo,
+    watch: watchPassword
   } = useForm({
     defaultValues: {
       name: user?.fullname || "",
@@ -51,7 +52,6 @@ const Setting = () => {
     dispatch(getCurrentUser())
       .unwrap()
       .then((userData) => {
-        // Reset form with user data when fetched
         resetPersonalInfo({
           name: userData.fullname || "",
           email: userData.email || "",
@@ -66,7 +66,6 @@ const Setting = () => {
     return () => clearTimeout(loaderTimeout);
   }, [dispatch, resetPersonalInfo]);
 
-  // Handle image change
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -75,7 +74,6 @@ const Setting = () => {
     }
   };
 
-  // Handle Personal Info Form Submission
   const handlePersonalInfoSubmit = useCallback(
     (data) => {
       setIsUpdating(true);
@@ -91,7 +89,6 @@ const Setting = () => {
         .unwrap()
         .then(() => {
           toast.success("Personal information updated successfully!");
-          // Refresh user data after update
           dispatch(getCurrentUser());
         })
         .catch((error) => {
@@ -104,7 +101,6 @@ const Setting = () => {
     [selectedImageFile, dispatch, user]
   );
 
-  // Handle Password Update Form Submission
   const handlePasswordUpdateSubmit = useCallback(
     (data) => {
       setIsUpdating(true);
@@ -120,7 +116,7 @@ const Setting = () => {
         .unwrap()
         .then(() => {
           toast.success("Password updated successfully!");
-          resetPassword(); // Clear password form after successful update
+          resetPassword();
         })
         .catch((error) => {
           toast.error(error.message || "Failed to update password");
@@ -140,7 +136,6 @@ const Setting = () => {
     setImageLoaded(true);
   };
 
-  // Convert the API date response into local date and time format
   const utcDateString = user?.createdAt;
   const localDateTime = new Date(utcDateString).toLocaleString("en-PK", {
     timeZone: "Asia/Karachi",
@@ -163,49 +158,49 @@ const Setting = () => {
       )}
 
       {/* Main Content */}
-      <div className="shadow-sm rounded bg-gray-200 sm:ms-[40%] sm:w-[61%] md:ms-[30%] md:w-[80%] lg:ms-[30%] lg:w-[60%] xl:ms-[30%] xl:w-[58%]">
-        <div className="p-6">
+      <div className="shadow-sm rounded bg-gray-200 mx-4 sm:mx-auto sm:max-w-[90%] md:max-w-[80%] lg:max-w-[70%] xl:max-w-[60%] sm:ml-[400px]">
+        <div className="p-4 sm:p-6">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold mb-4 text-center">
             Account Settings
           </h1>
 
           {/* Personal Info Form */}
           <form onSubmit={handlePersonalSubmit(handlePersonalInfoSubmit)}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-5 md:grid-cols-3 justify-center items-center">
-              {/* Left Section: Profile Image */}
-                <div className="flex items-center justify-center w-40 h-40 mx-auto sm:w-52 sm:h-52">
-                  {selectedImage ? (
-                    <img
-                      src={selectedImage}
-                      alt="User Preview"
-                      className="w-full h-full shadow-lg rounded-full object-cover bg-white border-2 border-custom-teal"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="w-full h-full shadow-lg rounded-full bg-custom-gray border-2 border-custom-teal flex items-center justify-center overflow-hidden">
-                      {(!user?.profileImage || imageError) ? (
-                        <FaUserCircle className="h-full w-full text-custom-teal" />
-                      ) : (
-                        <img
-                          src={user.profileImage}
-                          alt="Profile"
-                          loading="lazy"
-                          onError={handleImageError}
-                          onLoad={handleImageLoad}
-                          className={`w-full h-full object-cover ${imageLoaded ? 'block' : 'hidden'}`}
-                        />
-                      )}
-                    </div>
-                  )}
-                </div>
+            <div className="flex flex-col sm:flex-row gap-6 mb-5 items-center">
+              {/* Profile Image */}
+              <div className="flex items-center justify-center w-40 h-40 mx-auto sm:w-52 sm:h-52">
+                {selectedImage ? (
+                  <img
+                    src={selectedImage}
+                    alt="User Preview"
+                    className="w-full h-full shadow-lg rounded-full object-cover bg-white border-2 border-custom-teal"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="w-full h-full shadow-lg rounded-full bg-custom-gray border-2 border-custom-teal flex items-center justify-center overflow-hidden">
+                    {(!user?.profileImage || imageError) ? (
+                      <FaUserCircle className="h-full w-full text-custom-teal" />
+                    ) : (
+                      <img
+                        src={user.profileImage}
+                        alt="Profile"
+                        loading="lazy"
+                        onError={handleImageError}
+                        onLoad={handleImageLoad}
+                        className={`w-full h-full object-cover ${imageLoaded ? 'block' : 'hidden'}`}
+                      />
+                    )}
+                  </div>
+                )}
+              </div>
 
-              {/* Center Section: User Details */}
-              <div className="grid gap-4 text-sm md:px-4 w-full">
+              {/* User Details */}
+              <div className="flex-1 grid gap-4 text-sm w-full">
                 {user && (
                   <div>
                     <p className="font-bold text-lg">{user.fullname}</p>
                     <p className="text-gray-700 mb-2">{user.email}</p>
-                    <p className="text-gray-700 break-words w-96">
+                    <p className="text-gray-700 break-words max-w-full">
                       {user.NICNumber}
                     </p>
                   </div>
@@ -214,10 +209,10 @@ const Setting = () => {
                 {/* File Input and Button */}
                 <div className="flex flex-col justify-between h-full">
                   <div className="flex-grow"></div>
-                  <div className="w-[278px] sm:w-48 md:w-56 lg:w-52 mt-auto">
+                  <div className="w-full sm:w-48 md:w-56 lg:w-52 mt-auto">
                     <label
                       htmlFor="fileInput"
-                      className="bg-custom-teal text-white rounded-sm cursor-pointer text-center hover:bg-[#1b4664] flex items-center justify-center py-2 gap-2 w-4/6 sm:w-5/6"
+                      className="bg-custom-teal text-white rounded-sm cursor-pointer text-center hover:bg-[#1b4664] flex items-center justify-center py-2 gap-2 w-full sm:w-5/6"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -245,8 +240,8 @@ const Setting = () => {
                 </div>
               </div>
 
-              {/* Right Section: Role and Join Date */}
-              <div className="md:hidden sm:hidden hidden px-1 lg:block xl:block text-center">
+              {/* Role and Join Date (hidden on mobile) */}
+              <div className="hidden lg:flex flex-col items-center text-center">
                 <h2 className="font-extrabold mb-2 px-3 py-1 p-2 lg:w-52 lg:px-5 rounded-full border-2 border-custom-teal shadow-md bg-custom-gray">
                   {user?.role}
                 </h2>
@@ -256,9 +251,9 @@ const Setting = () => {
 
             {/* Personal Information Form Fields */}
             <h2 className="text-lg font-extrabold mb-4">Personal Information</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {/* Full Name */}
-              <div className="col-span-2 md:col-span-1">
+              <div>
                 <label
                   htmlFor="name"
                   className="block mb-2 text-sm font-medium text-gray-900"
@@ -284,7 +279,7 @@ const Setting = () => {
               </div>
 
               {/* Email */}
-              <div className="col-span-2 md:col-span-1">
+              <div>
                 <label
                   htmlFor="email"
                   className="block mb-2 text-sm font-medium text-gray-900"
@@ -314,7 +309,7 @@ const Setting = () => {
               </div>
 
               {/* NIC */}
-              <div className="col-span-2 md:col-span-1">
+              <div>
                 <label
                   htmlFor="nic"
                   className="block mb-2 text-sm font-medium text-gray-900"
@@ -344,7 +339,7 @@ const Setting = () => {
               </div>
 
               {/* Save Changes */}
-              <div className="pt-7 col-span-2 md:col-span-1">
+              <div className="pt-7">
                 <button
                   type="submit"
                   className="bg-custom-teal text-white text-sm py-3 w-full rounded-sm hover:bg-[#1b4664] flex items-center justify-center gap-2"
@@ -362,9 +357,9 @@ const Setting = () => {
             <h2 className="text-lg font-inter font-extrabold my-3 mb-4">
               Password Update
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {/* Current Password */}
-              <div className="col-span-2 md:col-span-1">
+              <div>
                 <label
                   htmlFor="oldPassword"
                   className="block mb-2 text-sm font-medium text-gray-900"
@@ -393,7 +388,7 @@ const Setting = () => {
               </div>
 
               {/* New Password */}
-              <div className="col-span-2 md:col-span-1">
+              <div>
                 <label
                   htmlFor="newPassword"
                   className="block mb-2 text-sm font-medium text-gray-900"
@@ -426,7 +421,7 @@ const Setting = () => {
               </div>
 
               {/* Confirm Password */}
-              <div className="col-span-2 md:col-span-1">
+              <div>
                 <label
                   htmlFor="confirmPassword"
                   className="block mb-2 text-sm font-medium text-gray-900"
@@ -457,7 +452,7 @@ const Setting = () => {
               </div>
 
               {/* Save Changes */}
-              <div className="pt-7 col-span-2 md:col-span-1">
+              <div className="pt-7">
                 <button
                   type="submit"
                   className="bg-custom-teal text-white text-sm py-3 w-full rounded-sm hover:bg-[#1b4664]"
@@ -474,4 +469,4 @@ const Setting = () => {
   );
 };
 
-export default Setting;
+export default Setting

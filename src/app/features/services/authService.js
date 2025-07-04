@@ -19,7 +19,7 @@ const verifyEmail = async (token) => {
 // Login User
 const login = async (userData) => {
   try {
-    const response = await axios.post(`${API_URL}/auth/login`, userData, { withCredentials: true });
+    const response = await axiosInstance.post(`${API_URL}/auth/login`, userData);
     return response.data;
   } catch (error) {
     console.error("Login Error:", error.response ? error.response.data : error.message);
