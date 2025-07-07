@@ -112,7 +112,7 @@ const SearchReportStatus = () => {
           )}
           {/* Report Details */}
           {hasSearched && singleReport && (
-            <div className="bg-gray-200 rounded-lg shadow-lg p-6 mb-8 border border-custom-teal">
+            <div className="bg-gray-200 rounded-lg shadow-lg p-6 mb-8 border border-custom-teal my-4">
               <h2 className="text-xl font-bold text-center mb-6">
                 Crime Report Details
               </h2>
