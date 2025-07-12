@@ -50,7 +50,7 @@ const Logout = () => {
           <HashLoader color="#173F5C" size={60} />
         </div>
       ) : (
-        <Dialog open={open} onClose={handleCancel} className="relative z-50">
+        <Dialog open={open} onClose={handleCancel} className="relative z-50 font-inter">
           <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm"></div>
           <div className="fixed inset-0 flex items-center justify-center p-4">
             <DialogPanel className="relative transform overflow-hidden rounded-md bg-white p-6 text-center shadow-xl w-full max-w-md">

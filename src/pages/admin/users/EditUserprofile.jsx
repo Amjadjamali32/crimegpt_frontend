@@ -3,9 +3,12 @@ import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { getSingleUser, updateUser } from "../../../app/features/user/userSlice.js";
+import {
+  getSingleUser,
+  updateUser,
+} from "../../../app/features/user/userSlice.js";
 import { HashLoader } from "react-spinners";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaSave } from "react-icons/fa";
 
 const EditUserprofile = () => {
   const { id } = useParams();
@@ -22,7 +25,7 @@ const EditUserprofile = () => {
     formState: { errors },
     reset,
     setValue,
-    watch
+    watch,
   } = useForm({
     defaultValues: {
       name: "",
@@ -34,8 +37,8 @@ const EditUserprofile = () => {
       role: "user",
       location: "",
       profileImage: null,
-      NICImage: null
-    }
+      NICImage: null,
+    },
   });
 
   useEffect(() => {
@@ -43,9 +46,6 @@ const EditUserprofile = () => {
       dispatch(getSingleUser(id));
     }
   }, [id, dispatch]);
-
-  console.log(singleUser);
-  
 
   useEffect(() => {
     if (singleUser?.data) {
@@ -58,14 +58,14 @@ const EditUserprofile = () => {
         NICNumber: userData.NICNumber || "",
         gender: userData.gender || "male",
         role: userData.role || "user",
-        location: userData.location || ""
+        location: userData.location || "",
       });
-      
+
       if (userData.profileImage) {
         setSelectedProfileImage(userData.profileImage);
         setValue("profileImage", userData.profileImage);
       }
-      
+
       if (userData.NICImage) {
         setSelectedNICImage(userData.NICImage);
         setValue("NICImage", userData.NICImage);
@@ -91,7 +91,7 @@ const EditUserprofile = () => {
 
   const onSubmit = async (data) => {
     const formDataToSend = new FormData();
-    
+
     Object.entries(data).forEach(([key, value]) => {
       if (value !== "" && value !== null) {
         formDataToSend.append(key, value);
@@ -99,7 +99,9 @@ const EditUserprofile = () => {
     });
 
     try {
-      await dispatch(updateUser({ userId: id, userData: formDataToSend })).unwrap();
+      await dispatch(
+        updateUser({ userId: id, userData: formDataToSend })
+      ).unwrap();
       toast.success("User updated successfully!");
       await dispatch(getSingleUser(id));
     } catch (error) {
@@ -121,66 +123,84 @@ const EditUserprofile = () => {
         </div>
       )}
 
-      <div className="pt-20 pb-4 px-4 font-inter">
-        <div className="sm:ms-[41%] sm:w-[61%] md:ms-[34%] md:w-[80%] lg:ms-[23%] lg:w-[76%] xl:ms-[18%] xl:w-[58%] shadow-sm rounded bg-gray-300">
-          <div className="p-6">
-            {/* Profile Section */}
-            <div className="flex items-center space-x-6 mb-6">
-              <div className="flex items-center justify-center border border-custom-teal shadow-md rounded-full w-36 h-36 bg-purple-100">
-              {selectedProfileImage ? (
-                <img
-                  src={selectedProfileImage}
-                  alt="User Preview"
-                  className="w-full h-full object-cover rounded-full"
-                  loading="lazy"  
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = '';
-                    e.target.style.display = 'none'; 
-                  }}
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                  <FaUser className="w-16 h-16 text-gray-500" />
-                </div>
-              )}
+      {/* Main container with responsive padding */}
+      <div className="pt-20 pb-8 px-4 lg:pl-64 lg:pr-6 min-h-screen bg-gray-50 font-inter">
+        {/* Responsive container */}
+        <div className="max-w-4xl mx-auto bg-blue-50 rounded-lg shadow-md overflow-hidden">
+          <div className="p-4 sm:p-6">
+            {/* Profile Section - Stack on small screens, row on larger */}
+            <div className="flex flex-col sm:flex-row items-center sm:space-x-6 space-y-4 sm:space-y-0 mb-6">
+              <div className="flex-shrink-0 flex items-center justify-center border border-custom-teal shadow-md rounded-full w-28 h-28 sm:w-36 sm:h-36 bg-purple-100">
+                {selectedProfileImage ? (
+                  <img
+                    src={selectedProfileImage}
+                    alt="User Preview"
+                    className="w-full h-full object-cover rounded-full"
+                    loading="lazy"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "";
+                      e.target.style.display = "none";
+                    }}
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                    <FaUser className="w-12 h-12 sm:w-16 sm:h-16 text-gray-500" />
+                  </div>
+                )}
               </div>
-              <div className="flex-1">
-                <h2 className="text-xl font-semibold gap-9">{currentValues.name}</h2>
-                <p className="text-gray-600">{currentValues.email}</p>
+
+              <div className="flex-1 text-center sm:text-left">
+                <h2 className="text-lg sm:text-xl font-semibold">
+                  {currentValues.name}
+                </h2>
+                <p className="text-gray-600 text-sm sm:text-base">
+                  {currentValues.email}
+                </p>
               </div>
-              <div className="text-right">
-                <h2 className="font-extrabold mb-2 px-9 py-1 rounded-full border-2 border-slate-500 shadow-md bg-custom-gray">
+
+              <div className="sm:text-right text-center">
+                <h2 className="font-extrabold mb-2 px-3 sm:px-4 py-1 rounded-full border-2 border-slate-500 shadow-md bg-custom-gray inline-block text-sm sm:text-base">
                   {currentValues.role}
                 </h2>
-                <p className="text-gray-500 text-sm">Joined {new Date().toLocaleDateString()}</p>
+                <p className="text-gray-500 text-xs sm:text-sm">
+                  Joined {new Date().toLocaleDateString()}
+                </p>
               </div>
             </div>
-            
+
             {/* Personal Info Form */}
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 {/* Name and Email */}
                 <div>
-                  <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900">
+                  <label
+                    htmlFor="name"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
                     Name
                   </label>
                   <input
                     type="text"
                     id="name"
                     {...register("name", { required: "Name is required!" })}
-                    className={`focus:outline-custom-teal border text-sm rounded-sm py-3.5 px-4 w-full ${
+                    className={`border text-sm rounded-md py-3 px-4 w-full focus:outline-none focus:ring-2 focus:ring-custom-teal focus:border-transparent ${
                       errors.name ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Name"
                   />
                   {errors.name && (
-                    <p className="text-red-500 text-sm">{errors.name.message}</p>
+                    <p className="mt-1 text-red-500 text-sm">
+                      {errors.name.message}
+                    </p>
                   )}
                 </div>
-                
+
                 <div>
-                  <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">
+                  <label
+                    htmlFor="email"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
                     Email
                   </label>
                   <input
@@ -189,23 +209,29 @@ const EditUserprofile = () => {
                     {...register("email", {
                       required: "Email is required",
                       pattern: {
-                        value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                        value:
+                          /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
                         message: "Enter a valid email address",
                       },
                     })}
-                    className={`focus:outline-custom-teal text-sm border rounded-sm py-3.5 px-4 w-full ${
+                    className={`border text-sm rounded-md py-3 px-4 w-full focus:outline-none focus:ring-2 focus:ring-custom-teal focus:border-transparent ${
                       errors.email ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Email"
                   />
                   {errors.email && (
-                    <p className="text-red-500 text-sm">{errors.email.message}</p>
+                    <p className="mt-1 text-red-500 text-sm">
+                      {errors.email.message}
+                    </p>
                   )}
                 </div>
 
                 {/* Password and Mobile */}
                 <div>
-                  <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">
+                  <label
+                    htmlFor="password"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
                     Password (leave blank to keep current)
                   </label>
                   <input
@@ -217,18 +243,23 @@ const EditUserprofile = () => {
                         message: "Password must be at least 6 characters",
                       },
                     })}
-                    className={`focus:outline-custom-teal text-sm border rounded-sm py-3.5 px-4 w-full ${
+                    className={`border text-sm rounded-md py-3 px-4 w-full focus:outline-none focus:ring-2 focus:ring-custom-teal focus:border-transparent ${
                       errors.password ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Password"
                   />
                   {errors.password && (
-                    <p className="text-red-500 text-sm">{errors.password.message}</p>
+                    <p className="mt-1 text-red-500 text-sm">
+                      {errors.password.message}
+                    </p>
                   )}
                 </div>
-                
+
                 <div>
-                  <label htmlFor="mobile" className="block mb-2 text-sm font-medium text-gray-900">
+                  <label
+                    htmlFor="mobile"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
                     Mobile No
                   </label>
                   <input
@@ -238,30 +269,34 @@ const EditUserprofile = () => {
                       required: "Mobile No is required",
                       pattern: {
                         value: /^\+92\d{10}$/,
-                        message: "Mobile number must start with +92 and be 13 characters long (e.g., +923001234567)",
+                        message:
+                          "Mobile number must start with +92 and be 13 characters long (e.g., +923001234567)",
                       },
                     })}
-                    className={`focus:outline-custom-teal border text-sm rounded-sm py-3.5 px-4 w-full ${
+                    className={`border text-sm rounded-md py-3 px-4 w-full focus:outline-none focus:ring-2 focus:ring-custom-teal focus:border-transparent ${
                       errors.mobile ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Mobile No (e.g., +923001234567)"
                   />
                   {errors.mobile && (
-                    <p className="text-red-500 text-sm">{errors.mobile.message}</p>
+                    <p className="mt-1 text-red-500 text-sm">
+                      {errors.mobile.message}
+                    </p>
                   )}
                 </div>
 
-                {/* NIC Number and NIC Image */}
-
                 {/* Gender and Role */}
                 <div>
-                  <label htmlFor="gender" className="block mb-2 text-sm font-medium text-gray-900">
+                  <label
+                    htmlFor="gender"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
                     Gender
                   </label>
                   <select
                     id="gender"
                     {...register("gender", { required: "Gender is required" })}
-                    className={`focus:outline-custom-teal border text-sm rounded-sm py-3.5 px-4 w-full ${
+                    className={`border text-sm rounded-md py-3 px-4 w-full focus:outline-none focus:ring-2 focus:ring-custom-teal focus:border-transparent ${
                       errors.gender ? "border-red-500" : "border-gray-300"
                     }`}
                   >
@@ -270,12 +305,17 @@ const EditUserprofile = () => {
                     <option value="other">Other</option>
                   </select>
                   {errors.gender && (
-                    <p className="text-red-500 text-sm">{errors.gender.message}</p>
+                    <p className="mt-1 text-red-500 text-sm">
+                      {errors.gender.message}
+                    </p>
                   )}
                 </div>
 
                 <div>
-                  <label htmlFor="NICNumber" className="block mb-2 text-sm font-medium text-gray-900">
+                  <label
+                    htmlFor="NICNumber"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
                     NIC Number
                   </label>
                   <input
@@ -285,60 +325,70 @@ const EditUserprofile = () => {
                       required: "NIC Number is required",
                       pattern: {
                         value: /^\d{13}$|^\d{5}-\d{7}-\d{1}$/,
-                        message: "NIC must be 13 digits or in the format XXXXX-XXXXXXX-X",
+                        message:
+                          "NIC must be 13 digits or in the format XXXXX-XXXXXXX-X",
                       },
                     })}
-                    className={`focus:outline-custom-teal border text-sm rounded-sm py-3.5 px-4 w-full ${
+                    className={`border text-sm rounded-md py-3 px-4 w-full focus:outline-none focus:ring-2 focus:ring-custom-teal focus:border-transparent ${
                       errors.NICNumber ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="NIC Number"
                   />
                   {errors.NICNumber && (
-                    <p className="text-red-500 text-sm">{errors.NICNumber.message}</p>
+                    <p className="mt-1 text-red-500 text-sm">
+                      {errors.NICNumber.message}
+                    </p>
                   )}
                 </div>
-                
+
                 <div>
-                  <label htmlFor="NICImage" className="block mb-2 text-sm font-medium text-gray-900">
+                  <label
+                    htmlFor="NICImage"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
                     NIC Picture
                   </label>
                   {selectedNICImage && (
-                  <div className="mb-2">
-                    <img 
-                      src={selectedNICImage} 
-                      alt="Current NIC" 
-                      className="h-20 w-auto border rounded"
-                      loading="lazy"  
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = ''; 
-                        e.target.style.display = 'none'; 
-                      }}
-                    />
-                  </div>
+                    <div className="mb-2">
+                      <img
+                        src={selectedNICImage}
+                        alt="Current NIC"
+                        className="h-20 w-auto border rounded"
+                        loading="lazy"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "";
+                          e.target.style.display = "none";
+                        }}
+                      />
+                    </div>
                   )}
                   <input
                     type="file"
                     id="NICImage"
                     accept="image/*"
                     onChange={handleNICImageChange}
-                    className="border text-sm bg-white py-2.5 pl-6 rounded-sm px-4 w-full"
+                    className="border text-sm rounded-md py-2 px-4 w-full bg-white"
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    {selectedNICImage && !(currentValues.NICImage instanceof File) 
+                    {selectedNICImage &&
+                    !(currentValues.NICImage instanceof File)
                       ? "Upload a new image to replace the current one"
                       : "Upload NIC image"}
                   </p>
                 </div>
-                
+
                 <div>
-                  <label htmlFor="role" className="block mb-2 text-sm font-medium text-gray-900">
+                  <label
+                    htmlFor="role"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
                     Role
                   </label>
                   <select
                     id="role"
                     {...register("role", { required: "Role is required" })}
-                    className={`focus:outline-custom-teal border text-sm rounded-sm py-3.5 px-4 w-full ${
+                    className={`border text-sm rounded-md py-3 px-4 w-full focus:outline-none focus:ring-2 focus:ring-custom-teal focus:border-transparent ${
                       errors.role ? "border-red-500" : "border-gray-300"
                     }`}
                   >
@@ -346,13 +396,18 @@ const EditUserprofile = () => {
                     <option value="admin">Admin</option>
                   </select>
                   {errors.role && (
-                    <p className="text-red-500 text-sm">{errors.role.message}</p>
+                    <p className="mt-1 text-red-500 text-sm">
+                      {errors.role.message}
+                    </p>
                   )}
                 </div>
 
                 {/* Profile Image (full width) */}
                 <div className="md:col-span-2">
-                  <label htmlFor="profileImage" className="block mb-2 w-3/6 text-sm font-medium text-gray-900">
+                  <label
+                    htmlFor="profileImage"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
                     Profile Image
                   </label>
                   <input
@@ -360,19 +415,29 @@ const EditUserprofile = () => {
                     id="profileImage"
                     accept="image/*"
                     onChange={handleProfileImageChange}
-                    className="border text-sm bg-white py-2.5 pl-6 rounded-sm px-4 w-full"
+                    className="border text-sm rounded-md py-2 px-4 w-full bg-white"
                   />
                 </div>
               </div>
 
-              {/* Save Changes Button (full width) */}
-              <div className="mt-7">
+              {/* Save Changes Button (centered) */}
+              <div className="mt-8 flex justify-center">
                 <button
                   type="submit"
-                  className="bg-custom-teal text-white py-3 w-3/6 rounded-full hover:bg-[#1b4664]"
+                  className="bg-custom-teal text-white py-3 px-6 sm:px-8 rounded-full hover:bg-[#1b4664] transition-colors duration-300 shadow-md w-full sm:w-auto flex items-center justify-center gap-2"
                   disabled={isLoading}
                 >
-                  {isLoading ? "Saving..." : "Save Changes"}
+                  {isLoading ? (
+                    <>
+                      <HashLoader color="#ffffff" size={20} />
+                      <span>Saving...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FaSave className="text-lg" />
+                      <span>Save Changes</span>
+                    </>
+                  )}
                 </button>
               </div>
             </form>

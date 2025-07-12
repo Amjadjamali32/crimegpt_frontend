@@ -25,9 +25,6 @@ const EditReport = () => {
     watch,
   } = useForm();
 
-  console.log(singleReport);
-  
-
   // Watch signature image changes
   const signatureImage = watch("signatureImage");
 
@@ -126,19 +123,25 @@ const EditReport = () => {
 
   return (
     <>
-      <div className="pt-20 pb-4 px-4 font-inter">
-        <div className="sm:ms-[41%] sm:w-[61%] md:ms-[34%] md:w-[80%] lg:ms-[25%] lg:w-[76%] xl:ms-[18%] xl:w-[58%] border-2 shadow-sm rounded bg-gray-200">
-          <div className="p-6">
-            {/* Form for Editing Reports */}
-            <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
-              <h2 className="text-lg font-bold mb-2 text-center">Edit Report</h2>
+      {/* Main container with responsive padding */}
+      <div className="pt-20 pb-8 px-4 lg:pl-64 lg:pr-6 min-h-screen bg-gray-100 font-inter">
+        {/* Responsive container */}
+        <div className="max-w-4xl mx-auto bg-blue-50 rounded-lg shadow-md overflow-hidden">
+          <div className="p-4 sm:p-6">
+            {/* Form Header */}
+            <div className="mb-6 text-center">
+              <h2 className="text-xl font-bold text-gray-800">Edit Report</h2>
               {singleReport?.data?.caseNumber && (
-                <p className="text-sm text-gray-600 mb-4 text-center">
+                <p className="text-sm text-gray-600 mt-2">
                   Case Number: <span className="font-medium">{singleReport.data.caseNumber}</span>
                 </p>
               )}
+            </div>
+
+            {/* Form for Editing Reports */}
+            <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
               {/* Police Station Name and Report Status */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6">
                 <div>
                   <label
                     htmlFor="policeStationName"
@@ -150,13 +153,13 @@ const EditReport = () => {
                     type="text"
                     id="policeStationName"
                     {...register("policeStationName", { required: "Police station name is required!" })}
-                    className={` focus:outline-custom-teal text-sm rounded-sm py-3.5 px-4 w-full ${
+                    className={`border text-sm rounded-md py-3 px-4 w-full focus:outline-none focus:ring-2 focus:ring-custom-teal focus:border-transparent ${
                       errors.policeStationName ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Enter Police Station Name"
                   />
                   {errors.policeStationName && (
-                    <p className="text-red-500 text-sm">{errors.policeStationName.message}</p>
+                    <p className="mt-1 text-red-500 text-sm">{errors.policeStationName.message}</p>
                   )}
                 </div>
                 <div>
@@ -166,7 +169,7 @@ const EditReport = () => {
                   <select
                     id="reportStatus"
                     {...register("reportStatus", { required: "Report status is required" })}
-                    className={`focus:outline-custom-teal text-sm rounded-sm py-3.5 px-4 w-full ${
+                    className={`border text-sm rounded-md py-3 px-4 w-full focus:outline-none focus:ring-2 focus:ring-custom-teal focus:border-transparent ${
                       errors.reportStatus ? "border-red-500" : "border-gray-300"
                     }`}
                   >
@@ -177,13 +180,13 @@ const EditReport = () => {
                     <option value="closed">Closed</option>
                   </select>
                   {errors.reportStatus && (
-                    <p className="text-red-500 text-sm">{errors.reportStatus.message}</p>
+                    <p className="mt-1 text-red-500 text-sm">{errors.reportStatus.message}</p>
                   )}
                 </div>
               </div>
 
               {/* Complainant and NIC Number */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6">
                 <div>
                   <label
                     htmlFor="complainantName"
@@ -195,13 +198,13 @@ const EditReport = () => {
                     type="text"
                     id="complainantName"
                     {...register("complainantName", { required: "Complainant Name is required!" })}
-                    className={`focus:outline-custom-teal text-sm rounded-sm py-3.5 px-4 w-full ${
+                    className={`border text-sm rounded-md py-3 px-4 w-full focus:outline-none focus:ring-2 focus:ring-custom-teal focus:border-transparent ${
                       errors.complainantName ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Enter Complainant Name"
                   />
                   {errors.complainantName && (
-                    <p className="text-red-500 text-sm">{errors.complainantName.message}</p>
+                    <p className="mt-1 text-red-500 text-sm">{errors.complainantName.message}</p>
                   )}
                 </div>
                 <div>
@@ -215,19 +218,19 @@ const EditReport = () => {
                     type="text"
                     id="nicNumber"
                     {...register("nicNumber", { required: "NIC Number is required!" })}
-                    className={`focus:outline-custom-teal text-sm rounded-sm py-3.5 px-4 w-full ${
+                    className={`border text-sm rounded-md py-3 px-4 w-full focus:outline-none focus:ring-2 focus:ring-custom-teal focus:border-transparent ${
                       errors.nicNumber ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Enter NIC Number"
                   />
                   {errors.nicNumber && (
-                    <p className="text-red-500 text-sm">{errors.nicNumber.message}</p>
+                    <p className="mt-1 text-red-500 text-sm">{errors.nicNumber.message}</p>
                   )}
                 </div>
               </div>
 
               {/* Crime Type and Location */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6">
                 <div>
                   <label
                     htmlFor="crimeType"
@@ -239,13 +242,13 @@ const EditReport = () => {
                     type="text"
                     id="crimeType"
                     {...register("crimeType", { required: "Crime Type is required!" })}
-                    className={`focus:outline-custom-teal text-sm rounded-sm py-3.5 px-4 w-full ${
+                    className={`border text-sm rounded-md py-3 px-4 w-full focus:outline-none focus:ring-2 focus:ring-custom-teal focus:border-transparent ${
                       errors.crimeType ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Enter Crime Type"
                   />
                   {errors.crimeType && (
-                    <p className="text-red-500 text-sm">{errors.crimeType.message}</p>
+                    <p className="mt-1 text-red-500 text-sm">{errors.crimeType.message}</p>
                   )}
                 </div>
                 <div>
@@ -259,19 +262,19 @@ const EditReport = () => {
                     type="text"
                     id="location"
                     {...register("location", { required: "Location is required!" })}
-                    className={`focus:outline-custom-teal text-sm rounded-sm py-3.5 px-4 w-full ${
+                    className={`border text-sm rounded-md py-3 px-4 w-full focus:outline-none focus:ring-2 focus:ring-custom-teal focus:border-transparent ${
                       errors.location ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Enter Location"
                   />
                   {errors.location && (
-                    <p className="text-red-500 text-sm">{errors.location.message}</p>
+                    <p className="mt-1 text-red-500 text-sm">{errors.location.message}</p>
                   )}
                 </div>
               </div>
               
               {/* Description (Textarea) */}
-              <div className="mb-8">
+              <div className="mb-6">
                 <label
                   htmlFor="description"
                   className="block mb-2 text-sm font-medium text-gray-900"
@@ -281,14 +284,14 @@ const EditReport = () => {
                 <textarea
                   id="description"
                   {...register("description", { required: "Description is required!" })}
-                  className={`focus:outline-custom-teal text-sm rounded-sm py-3.5 px-4 w-full ${
+                  className={`border text-sm rounded-md py-3 px-4 w-full focus:outline-none focus:ring-2 focus:ring-custom-teal focus:border-transparent ${
                     errors.description ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="Enter Description"
                   rows="4"
                 />
                 {errors.description && (
-                  <p className="text-red-500 text-sm">{errors.description.message}</p>
+                  <p className="mt-1 text-red-500 text-sm">{errors.description.message}</p>
                 )}
               </div>
 
@@ -333,12 +336,12 @@ const EditReport = () => {
                       },
                     },
                   })}
-                  className={`focus:ring-custom-gray focus:border-custom-teal text-sm rounded-sm py-2 px-4 w-full ${
+                  className={`border text-sm rounded-md py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-custom-teal focus:border-transparent ${
                     errors.signatureImage ? "border-red-500" : "border-gray-300"
                   }`}
                 />
                 {errors.signatureImage && (
-                  <p className="text-red-500 text-sm">{errors.signatureImage.message}</p>
+                  <p className="mt-1 text-red-500 text-sm">{errors.signatureImage.message}</p>
                 )}
               </div>
 
@@ -346,7 +349,7 @@ const EditReport = () => {
               <div className="flex justify-center">
                 <button
                   type="submit"
-                  className="bg-custom-teal text-white py-2.5 px-8 shadow-sm rounded-full hover:bg-[#1b4664] flex items-center gap-2 text-sm font-inter"
+                  className="bg-custom-teal text-white py-3 px-6 sm:px-8 rounded-full hover:bg-[#1b4664] transition-colors duration-300 shadow-md flex items-center gap-2 text-sm sm:text-base"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
@@ -357,21 +360,21 @@ const EditReport = () => {
                   ) : (
                     <>
                       Update Report
-                     <svg 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
-                      stroke="yellow" 
-                      strokeWidth="2" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round"
-                      className="w-5 h-5"
-                    >
-                      <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                      <path d="M3 3v5h5" />
-                      <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
-                      <path d="M16 16h5v5" />
-                    </svg>
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        strokeWidth="2" 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round"
+                        className="w-5 h-5"
+                      >
+                        <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                        <path d="M3 3v5h5" />
+                        <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+                        <path d="M16 16h5v5" />
+                      </svg>
                     </>
                   )}
                 </button>

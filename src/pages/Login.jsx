@@ -65,7 +65,7 @@ const Login = () => {
 
   return (
     <>
-      <div className="pt-20 md:pt-20 lg:pt-24">
+      <div className="pt-20 md:pt-20 lg:pt-24 xl:pt-28">
         <div className="flex flex-wrap items-center justify-center bg-gray-100 w-11/12 mx-auto mb-4 rounded-md p-6 shadow-xl border sm:w-6/12 md:p-2 md:w-5/12 lg:justify-center lg:w-4/12 border-[#c2c8d0]">
           <div className="md:w-9/12 lg:w-10/12 w-full">
             <div className="text-center mb-4 sm:mb-2">

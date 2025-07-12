@@ -38,7 +38,7 @@ const Hero = () => {
         <div className="w-full md:w-6/12 text-center md:text-left p-2">
           <h1 ref={el} className="text-custom-teal font-extrabold text-2xl inline-block mb-2 font-poppins md:mt-4"></h1> 
           <h3 className="font-poppins font-semibold text-xl my-2">Revolutionizing Crime Reporting with AI</h3>
-          <p className="mb-4 font-poppins font-md text-md">
+          <p className="mb-4 font-poppins font-md text-md text-gray-600">
             At Crime GPT, we believe in a safer world where every voice matters. Our platform allows individuals to report crimes, share evidence, and receive automated crime reports—all while maintaining anonymity. With the power of Artificial Intelligence (AI) and Natural Language Processing (NLP), Crime GPT simplifies the crime reporting process, making it faster, more efficient, and accessible to everyone.
           </p>
           <div className="flex flex-col items-center justify-center sm:flex-row">
