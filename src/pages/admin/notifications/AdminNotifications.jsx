@@ -10,8 +10,6 @@ const AdminNotifications = () => {
   const { singleNotification, loading, error } = useSelector(
     (state) => state.notification
   );
-
-  console.log("Single Notification:", singleNotification);
   
   useEffect(() => {
     dispatch(fetchSingleAdminNotification(id));
